@@ -1,0 +1,648 @@
+/* ====================================
+   ===== Global Styles and Setup =====
+   ==================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #f0f8ff, #e6f0ff); /* Soft gradient background */
+  color: #222;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #003366;
+    margin-bottom: 20px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: 60px 0 40px;
+  color: #003366;
+}
+
+/* ===== Buttons (Primary CTA) ===== */
+.btn {
+  display: inline-block;
+  background: linear-gradient(90deg, #005bea, #00c6fb);
+  color: white;
+  padding: 12px 28px;
+  border-radius: 50px; /* Highly rounded */
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.3s, box-shadow 0.3s, opacity 0.3s;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 150, 255, 0.35);
+  opacity: 0.95;
+}
+
+/* Small View Button for Product Cards */
+.btn-view {
+  padding: 8px 15px;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  background: #005bea;
+  box-shadow: none;
+}
+.btn-view:hover {
+  transform: none;
+  box-shadow: 0 5px 10px rgba(0, 91, 234, 0.3);
+}
+
+/* ====================================
+   ===== Header and Navigation =====
+   ==================================== */
+header {
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 15px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: #005bea;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+}
+
+nav a {
+  color: #444;
+  text-decoration: none;
+  margin: 0 12px;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease;
+  font-size: 0.95rem;
+  padding: 5px 0;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0%;
+  height: 3px;
+  background: #00c6fb;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+nav a:hover, nav a.active {
+  color: #005bea;
+}
+
+nav a:hover::after, nav a.active::after {
+  width: 100%;
+}
+
+.menu-btn {
+  display: none; /* Hidden on desktop */
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #005bea;
+}
+
+/* ====================================
+   ===== Home Page Sections =====
+   ==================================== */
+
+/* Hero Section */
+.hero {
+  background: white;
+  padding: 80px 0; /* Padding handled by internal container */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+  border-radius: 20px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.hero-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hero-text {
+  max-width: 50%;
+  text-align: left;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    line-height: 1.1;
+    margin-bottom: 15px;
+}
+
+.hero-text p {
+  color: #666;
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.hero-img {
+    max-width: 45%;
+}
+
+.hero-img img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Product Grid (Featured/Shop Page) */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  padding-bottom: 60px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  text-align: center;
+  border: 1px solid transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  border-color: #00c6fb;
+}
+
+.product-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.product-card h3 {
+  font-size: 1.3rem;
+  margin: 10px 0;
+  font-weight: 700;
+  color: #333;
+}
+
+.price {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ff6600;
+  margin-bottom: 15px;
+}
+
+
+/* ====================================
+   ===== About Page Styles =====
+   ==================================== */
+.about-section {
+  background: white; /* Use white background for the main section */
+  padding: 60px 40px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 40px;
+}
+
+.about-section h1 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.about-section p {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.about-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 20px 0 30px 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about-list li {
+  background: #eef3ff; /* Light blue background for list items */
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  color: #005bea;
+  font-weight: 600;
+}
+
+
+/* ====================================
+   ===== Contact Page Styles =====
+   ==================================== */
+/* .contact-form {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  max-width: 500px;
+  margin: 30px auto 60px auto;
+}
+
+.contact-form label {
+    display: block;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #005bea;
+  box-shadow: 0 0 0 3px rgba(0, 91, 234, 0.2);
+  outline: none;
+}
+
+.contact-form .btn {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.muted {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+    font-weight: 600;
+} */
+
+
+/* ====================================
+   ===== Contact Page Styles =====
+   ==================================== */
+.contact-form {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 91, 234, 0.1);
+  padding: 50px 40px;
+  max-width: 600px;
+  margin: 40px auto 80px auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-form:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 91, 234, 0.15);
+}
+
+.contact-form label {
+  display: block;
+  font-weight: 600;
+  color: #003366;
+  margin-bottom: 15px;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  margin-top: 6px;
+  margin-bottom: 18px;
+  border-radius: 10px;
+  border: 1.5px solid #d0e0ff;
+  font-size: 1rem;
+  color: #333;
+  background: #f9fbff;
+  transition: all 0.3s ease;
+}
+
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+  color: #aaa;
+  font-style: italic;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #005bea;
+  box-shadow: 0 0 0 4px rgba(0, 91, 234, 0.2);
+  outline: none;
+  background: #fff;
+}
+
+.contact-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-form .btn {
+  width: 100%;
+  background: linear-gradient(90deg, #005bea, #00c6fb);
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-form .btn:hover {
+  background: linear-gradient(90deg, #00c6fb, #005bea);
+  box-shadow: 0 10px 20px rgba(0, 91, 234, 0.25);
+}
+
+#formMsg {
+  text-align: center;
+  margin-top: 20px;
+  color: #005bea;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+
+
+
+/* ====================================
+   ===== Product Detail Styles =====
+   ==================================== */
+
+.product-detail-section {
+    display: flex;
+    gap: 40px;
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.product-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f8f8f8;
+}
+
+.product-image img {
+    max-width: 100%;
+    max-height: 400px;
+    object-fit: contain;
+}
+
+.product-info {
+    flex: 1.5;
+}
+
+.product-info h1 {
+    font-size: 2.8rem;
+    margin-top: 0;
+}
+
+.product-info .price {
+    font-size: 2rem;
+    margin: 10px 0 20px 0;
+}
+
+.product-info .description {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.product-info .features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.product-info .features li {
+    padding: 5px 0 5px 25px;
+    position: relative;
+    font-size: 1rem;
+    color: #333;
+}
+
+.product-info .features li::before {
+    content: '✓';
+    color: #005bea;
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+}
+
+.add-to-cart-btn {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+}
+
+
+/* ====================================
+   ===== Footer and Utility =====
+   ==================================== */
+footer {
+  background: #003366;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  margin-top: auto;
+  font-size: 0.9rem;
+  box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* ====================================
+   ===== MEDIA QUERIES (Responsiveness) =====
+   ==================================== */
+
+/* --- Desktop (1200px and above) --- */
+@media (min-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* --- Tablet/Small Desktop (up to 992px) --- */
+@media (max-width: 992px) {
+  .hero-inner {
+    flex-direction: column;
+    text-align: center;
+    padding: 0;
+  }
+
+  .hero-text, .hero-img {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  .hero-text h1 {
+      font-size: 2.5rem;
+  }
+
+  /* Product Detail Page Stack */
+  .product-detail-section {
+    flex-direction: column;
+    padding: 30px;
+  }
+  
+  .product-image img {
+      max-height: 300px;
+  }
+}
+
+/* --- Mobile/Tablet (up to 768px) --- */
+@media (max-width: 768px) {
+  /* Navigation Toggle */
+  .menu-btn {
+    display: block; /* Show menu button */
+  }
+  
+  nav {
+    display: none; /* Hide navigation by default */
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* Position below header */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+    z-index: 1000;
+  }
+  
+  nav a {
+    margin: 10px 0;
+    padding: 10px 20px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  nav a:last-child {
+      border-bottom: none;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+
+  .about-section {
+    padding: 40px 20px;
+  }
+}
+
+/* --- Mobile (up to 480px) --- */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 10px;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+  
+  .hero-text p {
+    font-size: 1rem;
+  }
+
+  .product-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}

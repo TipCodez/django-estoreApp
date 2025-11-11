@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | ElectroMart</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+  <header>
+    <div class="container nav-row">
+      <a href="{% url 'home' %}" class="logo">ElectroMart</a>
+      <nav id="nav" class="nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'shop' %}">Shop</a>
+        <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'contact' %}">Contact</a>
+      </nav>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="about-section container reveal">
+      <h1>About ElectroMart</h1>
+      <p>Founded in 2020, ElectroMart is your trusted online electronics store. We provide high-quality gadgets, home electronics, and accessories at affordable prices. Our goal is to make technology accessible to everyone.</p>
+
+      <p>We specialize in:</p>
+      <ul class="about-list">
+        <li>Laptops, desktops, and accessories</li>
+        <li>Smartphones and wearable tech</li>
+        <li>Audio devices and home entertainment</li>
+        <li>Smart home devices and more</li>
+      </ul>
+
+      <p>At ElectroMart, customer satisfaction is our priority. We carefully select products from trusted brands and ensure fast shipping and excellent support. Your tech journey starts here!</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>© 2025 ElectroMart | Your trusted electronics store</p>
+    </div>
+  </footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+
+</body>
+</html>
