@@ -14,14 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+# project/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings # Import settings
+from django.conf.urls.static import static # Import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('estorewebApp.urls')),  # Include the URLs from the estorewebapp app
+    path('', include('estorewebApp.urls')), # Assuming your app is estorewebApp
 ]
+
+# CRITICAL: Serve media files only during development
 if settings.DEBUG:
-    urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
