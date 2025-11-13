@@ -40,9 +40,17 @@ def contact(request):
 
 
 def product(request, product_id):
-    """
-    Product detail page view.
-    Shows a single product based on its ID.
-    """
     product = get_object_or_404(Product, id=product_id)
-    return render(request, 'product.html', {'product': product})
+    
+    # 🔑 Recommendation Logic: Find 4 other products in the same category
+    related_products = Product.objects.filter(
+        category=product.category # Filter by same category
+    ).exclude(
+        id=product.id # Exclude the current product
+    )[:4] # Limit to 4 recommendations
+
+    context = {
+        'product': product,
+        'related_products': related_products
+    }
+    return render(request, 'product.html', context)

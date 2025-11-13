@@ -115,6 +115,26 @@
     <button class="btn add-to-cart-btn">ADD TO CART</button>
   </div>
 </div>
+<section class="related-products container">
+    <h2 class="section-title">You Might Also Like</h2>
+    <div class="product-grid">
+        {% for product in related_products %}
+       
+            <article class="product-card reveal">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                <h3>{{ product.name }}</h3>
+                <p class="price">${{ product.price|floatformat:2 }}</p>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-view">View</a>
+            
+            
+              </article>
+             
+        {% empty %}
+            <p>No related items found.</p>
+        {% endfor %}
+       
+    </div>
+</section>
 </main>
 
 

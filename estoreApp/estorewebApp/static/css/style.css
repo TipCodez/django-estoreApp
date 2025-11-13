@@ -533,6 +533,57 @@ footer {
 }
 
 
+/* ... (Existing CSS) ... */
+
+/* ====================================
+   ===== Product Detail Styles =====
+   ==================================== */
+
+/* ... (Existing .product-detail-section, .product-image, .product-info styles) ... */
+
+/* New Section for Related Products Styling */
+.related-products {
+    margin-top: 60px;
+}
+
+/* Horizontal Scroll Grid Styles */
+.horizontal-scroll-grid {
+    /* 1. Force the grid items to stay in one line */
+    display: flex;
+    flex-wrap: nowrap; 
+    
+    /* 2. Enable horizontal scrolling */
+    overflow-x: auto; 
+    
+    /* 3. Hide the standard scrollbar for a cleaner look */
+    overflow-y: hidden; 
+    
+    /* 4. Add padding/gap for visual appeal when scrolling */
+    gap: 20px;
+    padding-bottom: 20px; /* Space for hidden scroll bar or touch padding */
+    
+    /* Smooth scrolling behavior */
+    scroll-behavior: smooth; 
+
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Override the standard product-grid structure for the horizontal version */
+.horizontal-scroll-grid .product-card {
+    /* Force card width and prevent shrinking */
+    flex: 0 0 auto; 
+    width: 280px; /* Fixed width for better carousel feel */
+}
+
+/* Hide scrollbar for WebKit browsers (Chrome, Safari) */
+.horizontal-scroll-grid::-webkit-scrollbar {
+    display: none;
+}
+
+/* ... (Rest of existing CSS, including the original .product-grid) ... */
+
 
 
 /* ====================================
