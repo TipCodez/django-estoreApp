@@ -1,5 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
+from .models import Profile, Product, Order, OrderItem
 
 
 def home(request):
@@ -30,6 +35,36 @@ def about(request):
     About page view
     """
     return render(request, "about.html")
+
+
+def signup_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm = request.POST.get("confirm")
+
+        phone = request.POST.get("phone")
+        address = request.POST.get("address")
+        location = request.POST.get("location")
+
+        if password != confirm:
+            messages.error(request, "Passwords do not match.")
+            return redirect("signup")
+
+        # Create User
+        user = User.objects.create_user(username=username, email=email, password=password)
+
+        # Save extra details in Profile
+        user.profile.phone = phone
+        user.profile.address = address
+        user.profile.location = location
+        user.profile.save()
+
+        login(request, user)
+        return redirect("home")
+
+    return render(request, "accounts/signup.html")
 
 
 def contact(request):
