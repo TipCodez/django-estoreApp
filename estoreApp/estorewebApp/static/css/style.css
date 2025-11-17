@@ -586,6 +586,128 @@ footer {
 
 
 
+/* ============================
+   SIGNUP PAGE STYLING
+============================ */
+
+.signup-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #e6f0ff, #f0f8ff);
+}
+
+.signup-card {
+    background: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px 35px;
+    border-radius: 18px;
+    box-shadow: 0 10px 35px rgba(0, 91, 234, 0.15);
+    animation: fadeIn 0.8s ease;
+}
+
+.signup-card h2 {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #003366;
+    margin-bottom: 10px;
+}
+
+.signup-sub {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+
+/* Input field container */
+.input-box {
+    margin-bottom: 18px;
+}
+
+.input-box label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 6px;
+    color: #003366;
+}
+
+/* Input fields */
+.input-box input,
+.input-box select,
+.input-box textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #d0e0ff;
+    background: #f9fbff;
+    font-size: 1rem;
+    transition: 0.3s ease;
+}
+
+.input-box input:focus {
+    background: #fff;
+    border-color: #005bea;
+    box-shadow: 0 0 4px rgba(0, 91, 234, 0.3);
+    outline: none;
+}
+
+/* Validation errors */
+.field-error {
+    color: #d9534f;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* Signup Button */
+.signup-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #005bea, #00c6fb);
+    border: none;
+    border-radius: 50px;
+    color: white;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s ease;
+    margin-top: 10px;
+}
+
+.signup-btn:hover {
+    background: linear-gradient(90deg, #00c6fb, #005bea);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 91, 234, 0.25);
+}
+
+/* Login link */
+.login-text {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 0.95rem;
+}
+
+.login-text a {
+    color: #005bea;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.login-text a:hover {
+    text-decoration: underline;
+}
+
+/* Fade animation used elsewhere too */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 /* ====================================
    ===== MEDIA QUERIES (Responsiveness) =====
    ==================================== */

@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | MyShop</title>
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+</head>
+<body>
+
+<div class="signup-container">
+    <form method="POST" class="signup-card">
+        {% csrf_token %}
+
+        <h2>Create Account</h2>
+        <p class="signup-sub">Join MyShop and start enjoying exclusive deals.</p>
+
+        <!-- Loop through Django form fields -->
+        {% for field in form %}
+        <div class="input-box">
+            <label>{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <p class="field-error">{{ field.errors|striptags }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="signup-btn">Create Account</button>
+
+        <p class="login-text">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </p>
+
+    </form>
+</div>
+
+</body>
+</html>
