@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import Profile, Product
 
+profile = Profile()
 
 def home(request):
     """
@@ -48,10 +49,19 @@ def signup_view(request):
         address = request.POST.get("address")
         location = request.POST.get("location")
 
+        
         if password != confirm:
             messages.error(request, "Passwords do not match.")
             return redirect("signup")
-
+        
+        if User.objects.filter(username=username).exists():
+                messages.error(request, "Username already taken.")
+                return redirect('signup') 
+            
+        if User.objects.filter(email=email).exists():
+                messages.error(request, "Email already taken.")
+                return redirect('signup') 
+                
         # Create User
         user = User.objects.create_user(username=username, email=email, password=password)
 
@@ -80,11 +90,11 @@ def login_view(request):
             messages.error(request, "Invalid username or password.")
             return redirect("login")
 
-    return render(request, "login.html")
+    return render(request, "registeration/login.html")
 
 def logout_view(request):
     logout(request)
-    return redirect("login")
+    return redirect("registeration/login.html")
 
 
 

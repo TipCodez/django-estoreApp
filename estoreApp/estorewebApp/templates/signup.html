@@ -25,6 +25,12 @@
 
         <form method="POST" class="signup-form">
             {% csrf_token %}
+            {% if messages %}
+            {% for message in messages %}
+                <p class="field-error" style="text-align:center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
 
             <div class="input-box">
                 <label for="username">First name</label>
