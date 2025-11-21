@@ -43,6 +43,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=20, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
+    profile_image = models.ImageField(upload_to='profile_images/', default='default.png')    
     location = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
