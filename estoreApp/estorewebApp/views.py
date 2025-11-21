@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Product
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from .models import Profile, Product
@@ -121,37 +122,59 @@ def product(request, product_id):
     }
     return render(request, 'product.html', context)
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Profile
+
+
+# @login_required
+# def profile_view(request):
+#     profile = request.user.profile
+
+#     if request.method == 'POST':
+#         user = request.user
+#         profile = request.user.profile
+
+#         # Update user fields
+#         user.first_name = request.POST.get('first_name')
+#         user.last_name = request.POST.get('last_name')
+#         user.email = request.POST.get('email')
+#         user.save()
+
+#         # Update profile fields
+      
+#         profile.phone = request.POST.get('phone')
+#         profile.address = request.POST.get('address')
+
+#         if request.FILES.get('profile_image'):
+#             profile.profile_image = request.FILES.get('profile_image')
+
+#         profile.save()
+
+#         return redirect('profile')
+
+#     return render(request, 'profile.html', {"profile": profile})
+
 
 @login_required
-def profile_view(request):
+def update_profile_view(request):
     profile = request.user.profile
 
     if request.method == 'POST':
         user = request.user
-        profile = request.user.profile
-
         # Update user fields
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
-        user.email = request.POST.get('email')
-        user.save()
-
-        # Update profile fields
-        # profile.bio = request.POST.get('bio')
+        profile.first_name = request.POST.get('first_name')
+        profile.last_name = request.POST.get('last_name')
         profile.phone = request.POST.get('phone')
         profile.address = request.POST.get('address')
 
+        # Handle image upload
         if request.FILES.get('profile_image'):
             profile.profile_image = request.FILES.get('profile_image')
 
         profile.save()
+        user.save()
 
-        return redirect('profile')
+        return redirect('profile')   # ⬅ Redirect back to profile page
 
-    return render(request, 'profile.html', {"profile": profile})
+    return render(request, 'update_profile.html', {'profile': profile})
 
 
 @login_required

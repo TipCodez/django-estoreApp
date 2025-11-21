@@ -84,6 +84,8 @@
         <div class="profile-details">
             <h3>Profile Details</h3>
 
+            <div class="detail-box"><strong>First Name:</strong> {{ request.user.username  }}</div>
+            <div class="detail-box"><strong>Last name:</strong> {{ request.user.last_name }}</div>
             <div class="detail-box"><strong>Phone:</strong> {{ user.profile.phone }}</div>
             <div class="detail-box"><strong>Address:</strong> {{ user.profile.address }}</div>
         </div>

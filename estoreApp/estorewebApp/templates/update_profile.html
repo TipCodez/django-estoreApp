@@ -90,10 +90,10 @@
                 <input type="text" name="address" value="{{ profile.address }}">
             </div>
 
-            <div class="form-group">
+            {% comment %} <div class="form-group">
                 <label>Bio</label>
                 <textarea name="bio" rows="4">{{ profile.bio }}</textarea>
-            </div>
+            </div> {% endcomment %}
 
             <button type="submit">Save Changes</button>
             <a href="{% url 'profile' %}">Cancel</a>
