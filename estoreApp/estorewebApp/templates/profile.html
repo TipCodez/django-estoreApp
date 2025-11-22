@@ -63,6 +63,16 @@
             border-radius: 6px;
             font-weight: bold;
         }
+        .logout-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #eeb02aff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
 
         .edit-btn:hover {
             background: #217dbb;
@@ -84,13 +94,15 @@
         <div class="profile-details">
             <h3>Profile Details</h3>
 
-            <div class="detail-box"><strong>First Name:</strong> {{ request.user.username  }}</div>
-            <div class="detail-box"><strong>Last name:</strong> {{ request.user.last_name }}</div>
+            <div class="detail-box"><strong>First Name:</strong> {{ user.username  }}</div>
+            {% comment %} <div class="detail-box"><strong>First name:</strong> {{ user.profile.username }}</div> {% endcomment %}
+            <div class="detail-box"><strong>Last name:</strong> {{ user.profile.last_name }}</div>
             <div class="detail-box"><strong>Phone:</strong> {{ user.profile.phone }}</div>
             <div class="detail-box"><strong>Address:</strong> {{ user.profile.address }}</div>
         </div>
 
         <a href="{% url 'update_profile' %}" class="edit-btn">Edit Profile</a>
+        <a href="{% url 'logout' %}" class="logout-btn">Logout</a></a>
 
     </div>
 </body>

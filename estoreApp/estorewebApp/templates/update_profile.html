@@ -37,6 +37,16 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
+        .cn-btn {
+            background: #f1c249ff;
+            margin-top: 10px;
+             color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+
+
+        }
         button {
             width: 100%;
             padding: 10px;
@@ -47,6 +57,7 @@
             cursor: pointer;
         }
         button:hover { background: #0056b3; }
+        .cn-btn:hover { background: #ef451aff; }
     </style>
 </head>
 <body>
@@ -66,13 +77,18 @@
             </div>
 
             <div class="form-group">
+                 {% if messages %}
+            {% for message in messages %}
+                <p class="field-error" style="text-align:center;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
                 <label>First Name</label>
-                <input type="text" name="first_name" value="{{ request.user.first_name }}">
+                <input type="text" name="username" value="{{ request.user.username }}">
             </div>
 
             <div class="form-group">
                 <label>Last Name</label>
-                <input type="text" name="last_name" value="{{ request.user.last_name }}">
+                <input type="text" name="last_name" value="{{ profile.last_name }}">
             </div>
 
             <div class="form-group">
@@ -90,13 +106,9 @@
                 <input type="text" name="address" value="{{ profile.address }}">
             </div>
 
-            {% comment %} <div class="form-group">
-                <label>Bio</label>
-                <textarea name="bio" rows="4">{{ profile.bio }}</textarea>
-            </div> {% endcomment %}
 
             <button type="submit">Save Changes</button>
-            <a href="{% url 'profile' %}">Cancel</a>
+            <a href="{% url 'profile' %}"><button class="cn-btn">Cancel</button></a>
 
         </form>
     </div>

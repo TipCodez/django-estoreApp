@@ -160,7 +160,9 @@ def update_profile_view(request):
     if request.method == 'POST':
         user = request.user
         # Update user fields
-        profile.first_name = request.POST.get('first_name')
+        user.username = request.POST.get('username')
+        user.last_name = request.POST.get('last_name')
+        # profile.username = request.POST.get('username')
         profile.last_name = request.POST.get('last_name')
         profile.phone = request.POST.get('phone')
         profile.address = request.POST.get('address')
