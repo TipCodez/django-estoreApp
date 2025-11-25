@@ -1,0 +1,196 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Cart</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #e7f1ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* NAVIGATION BAR */
+        .navbar {
+            background: #003f8a;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+        .navbar a {
+            color: #fff;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            padding: 40px;
+        }
+
+        /* LEFT – CART ITEMS */
+        .cart-items {
+            flex: 2;
+            margin-right: 30px;
+        }
+
+        .cart-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #003f8a;
+            margin-bottom: 20px;
+        }
+
+        .item-card {
+            display: flex;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .item-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            margin-right: 20px;
+        }
+
+        .item-details {
+            flex: 1;
+        }
+
+        .qty-box {
+            width: 60px;
+            padding: 5px;
+        }
+
+        .remove-btn {
+            background: linear-gradient(to bottom right, #00aaff, #0077ff);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* RIGHT – ORDER SUMMARY */
+        .summary-box {
+            flex: 1;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            height: fit-content;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .summary-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #003f8a;
+            margin-bottom: 15px;
+        }
+
+        .summary-row {
+            margin-bottom: 10px;
+            font-size: 17px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background: #003f8a;
+            color: white;
+            border: none;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .continue-btn {
+            width: 100%;
+            padding: 12px;
+            background: #ccc;
+            border: none;
+            font-size: 17px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<!-- NAV BAR -->
+<div class="navbar">
+    <div style="font-size: 20px; font-weight: bold;">ElectroMart</div>
+    <div>
+          <a href="{% url 'home' %}">Home</a>
+   
+
+      <a href="{% url 'shop' %}">Shop</a>
+      <a href="{% url 'about' %}">About</a>
+      <a href="{% url 'contact' %}">Contact</a>
+  <a href="{% url 'cart' %}">Cart</a>
+
+      <a href="{% url 'logout' %}">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- LEFT SECTION (Cart Items) -->
+    <div class="cart-items">
+        <div class="cart-title">Your Shopping Cart</div>
+
+        {% for item in cart_items %}
+        <div class="item-card">
+            <img src="{{ item.product.image.url }}" alt="Product">
+
+            <div class="item-details">
+                <h3>{{ item.product.name }}</h3>
+
+                <p>Price: ${{ item.product.price }}</p>
+                <p><strong>Subtotal: ${{ item.subtotal }}</strong></p>
+
+                <form method="POST" action="{% url 'update_cart' item.id %}">
+                    {% csrf_token %}
+                    Quantity:
+                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="qty-box">
+
+                    <button type="submit" class="remove-btn" style="margin-left: 10px;">Update</button>
+                </form>
+            </div>
+
+            <a href="{% url 'remove_from_cart' item.id %}">
+                <button class="remove-btn">REMOVE</button>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- RIGHT SECTION (Order Summary) -->
+    <div class="summary-box">
+        <div class="summary-title">Order Summary</div>
+
+        <div class="summary-row">Total Items: <strong>{{ total_items }}</strong></div>
+        <div class="summary-row">Cart Total: <strong>${{ total_price }}</strong></div>
+
+        <button class="checkout-btn">PROCEED TO CHECKOUT</button>
+        <a href="{% url 'shop' %}"> <button class="continue-btn">CONTINUE SHOPPING</button> </a>
+    </div>
+
+</div>
+
+</body>
+</html>

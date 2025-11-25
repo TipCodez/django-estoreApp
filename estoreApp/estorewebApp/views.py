@@ -177,6 +177,9 @@ def add_to_cart(request, product_id):
 def cart_view(request):
     """Displays the current cart contents (supports guests)."""
     cart = get_or_create_cart(request)
+    cart_items = Cart.objects.filter(user=request.user)
+
+
     
     context = {
         'cart': cart,
