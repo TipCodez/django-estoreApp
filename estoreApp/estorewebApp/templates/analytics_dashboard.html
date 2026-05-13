@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - ElectroMart</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+{% include "partials/navbar.html" with active_page="analytics" %}
+<main class="container" style="padding:2rem 0;">
+    <h1>Analytics Dashboard</h1>
+
+    <div class="wishlist-grid" style="margin-bottom: 2rem;">
+        <article class="wishlist-card"><h3>Total Orders</h3><p>{{ total_orders }}</p></article>
+        <article class="wishlist-card"><h3>Paid Orders</h3><p>{{ paid_orders }}</p></article>
+        <article class="wishlist-card"><h3>Pending Orders</h3><p>{{ pending_orders }}</p></article>
+        <article class="wishlist-card"><h3>Cancelled Orders</h3><p>{{ cancelled_orders }}</p></article>
+        <article class="wishlist-card"><h3>Gross Revenue</h3><p>GHS {{ gross_revenue|floatformat:2 }}</p></article>
+        <article class="wishlist-card"><h3>Total Discounts</h3><p>GHS {{ discount_total|floatformat:2 }}</p></article>
+        <article class="wishlist-card"><h3>Average Order Value</h3><p>GHS {{ avg_order_value|floatformat:2 }}</p></article>
+    </div>
+
+    <h2>Top Products</h2>
+    <div class="testimonial-list">
+        {% for row in top_products %}
+            <article class="testimonial-card">
+                <p><strong>{{ row.product__name }}</strong></p>
+                <p>Units Sold: {{ row.units_sold }}</p>
+                <p>Sales: GHS {{ row.sales|floatformat:2 }}</p>
+            </article>
+        {% empty %}
+            <p>No paid product sales yet.</p>
+        {% endfor %}
+    </div>
+
+    <h2>Order Status Breakdown</h2>
+    <div class="testimonial-list">
+        {% for row in status_breakdown %}
+            <article class="testimonial-card">
+                <p><strong>{{ row.status|title }}</strong>: {{ row.count }}</p>
+            </article>
+        {% endfor %}
+    </div>
+
+    <h2>Payment Status Breakdown</h2>
+    <div class="testimonial-list">
+        {% for row in payment_breakdown %}
+            <article class="testimonial-card">
+                <p><strong>{{ row.payment_status|title }}</strong>: {{ row.count }}</p>
+            </article>
+        {% endfor %}
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - ElectroMart</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+{% include "partials/navbar.html" with active_page="wishlist" %}
+{% include "partials/flash_messages.html" %}
+
+<main class="container" style="padding:2rem 0;">
+  <h1>My Wishlist</h1>
+  {% if wishlist_items %}
+    <div class="wishlist-grid">
+      {% for item in wishlist_items %}
+        <article class="wishlist-card">
+          {% if item.product.image %}
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+          {% endif %}
+          <h3>{{ item.product.name }}</h3>
+          <p>GHS {{ item.product.final_price|floatformat:2 }}</p>
+          <a href="{% url 'move_wishlist_to_cart' item.id %}" class="btn btn-view">Move to Cart</a>
+          <a href="{% url 'remove_from_wishlist' item.id %}" class="btn btn-remove-wishlist">Remove</a>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Your wishlist is empty.</p>
+  {% endif %}
+</main>
+</body>
+</html>

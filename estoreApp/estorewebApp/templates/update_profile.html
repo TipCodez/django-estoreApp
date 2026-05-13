@@ -1,17 +1,21 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <title>User Profile</title>
     <style>
-        body { 
+        body {
             font-family: Arial, sans-serif; 
             background: #f4f4f4; 
-            padding: 40px;
+            margin: 0;
+            padding: 0;
         }
         .profile-container {
             width: 500px;
-            margin: auto;
+            margin: 40px auto;
             background: #fff;
             padding: 20px;
             border-radius: 10px;
@@ -61,6 +65,7 @@
     </style>
 </head>
 <body>
+    {% include "partials/navbar.html" with active_page="profile" %}
     <div class="profile-container">
         <h2 class="profile-header">My Profile</h2>
 
@@ -119,5 +124,6 @@
             img.src = URL.createObjectURL(event.target.files[0]);
         }
     </script>
+    <script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

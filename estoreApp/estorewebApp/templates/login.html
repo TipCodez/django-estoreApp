@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+{% include "partials/navbar.html" with active_page="login" %}
 
 <div class="signup-container">  <!-- same layout for consistency -->
     <form method="POST" class="signup-card">
@@ -41,5 +42,6 @@
     </form>
 </div>
 
+<script src="{% static 'js/main.js' %}"></script>
 </body>
 </html>

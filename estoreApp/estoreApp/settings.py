@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os 
+import importlib.util
 import environ
 from dotenv import load_dotenv
 
@@ -19,7 +20,7 @@ load_dotenv()
 
 # Initialize environment variables
 env = environ.Env(
-    DEBUG=(bool, True)
+    DEBUG=(bool, False)
 )
 
 LOGOUT_REDIRECT_URL = 'login'
@@ -28,17 +29,20 @@ LOGIN_REDIRECT_URL = '/'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Read .env file
-SECRET_KEY = environ.Env.read_env(os.path.join(BASE_DIR, '.env'))  
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY", default="django-insecure-change-this-in-production")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Prefer DJANGO_DEBUG to avoid collisions with machine-level DEBUG env vars.
+DEBUG = env.bool("DJANGO_DEBUG", default=env.bool("DEBUG", default=False))
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [h.strip() for h in env("ALLOWED_HOSTS", default="127.0.0.1,localhost").split(",") if h.strip()]
+CSRF_TRUSTED_ORIGINS = [
+    o.strip() for o in env("CSRF_TRUSTED_ORIGINS", default="").split(",") if o.strip()
+]
 # ALLOWED_HOSTS = ["*"]
 # CSRF_TRUSTED_ORIGINS = [
 #     "https://43eb604d1d8e.ngrok-free.app",  # replace with your ngrok URL
@@ -60,8 +64,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
+HAS_WHITENOISE = importlib.util.find_spec("whitenoise") is not None
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'estorewebApp.middleware.EndpointRateLimitMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,6 +76,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if HAS_WHITENOISE:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'estoreApp.urls'
 
@@ -95,16 +105,19 @@ WSGI_APPLICATION = 'estoreApp.wsgi.application'
 
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv("DB_NAME"),
-        'USER': os.getenv("DB_USER"),
-        'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': os.getenv("DB_HOST"),
-        'PORT': os.getenv("DB_PORT"),
+if env("DATABASE_URL", default=""):
+    DATABASES = {"default": env.db("DATABASE_URL")}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': env("DB_ENGINE", default='django.db.backends.sqlite3'),
+            'NAME': env("DB_NAME", default=str(BASE_DIR / "db.sqlite3")),
+            'USER': env("DB_USER", default=""),
+            'PASSWORD': env("DB_PASSWORD", default=""),
+            'HOST': env("DB_HOST", default=""),
+            'PORT': env("DB_PORT", default=""),
+        }
     }
-}
 
 
 
@@ -143,13 +156,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 # settings.py
 
 
 # Optional for production
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+if HAS_WHITENOISE:
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -161,3 +176,53 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Payments
+PAYSTACK_PUBLIC_KEY = env("PAYSTACK_PUBLIC_KEY", default="")
+PAYSTACK_SECRET_KEY = env("PAYSTACK_SECRET_KEY", default="")
+
+# Email
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER or "no-reply@electromart.local")
+
+# Cache (used for rate limiting and auth hardening counters)
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "estore-security-cache",
+    }
+}
+
+# Security hardening
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = env("SESSION_COOKIE_SAMESITE", default="Lax")
+CSRF_COOKIE_SAMESITE = env("CSRF_COOKIE_SAMESITE", default="Lax")
+SESSION_COOKIE_SECURE = env.bool("SESSION_COOKIE_SECURE", default=not DEBUG)
+CSRF_COOKIE_SECURE = env.bool("CSRF_COOKIE_SECURE", default=not DEBUG)
+SECURE_HSTS_SECONDS = env.int("SECURE_HSTS_SECONDS", default=0 if DEBUG else 31536000)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("SECURE_HSTS_INCLUDE_SUBDOMAINS", default=not DEBUG)
+SECURE_HSTS_PRELOAD = env.bool("SECURE_HSTS_PRELOAD", default=False)
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not DEBUG)
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+if not DEBUG and SECRET_KEY == "django-insecure-change-this-in-production":
+    raise ValueError("Set SECRET_KEY in environment for production.")
+
+# Login hardening and endpoint rate limits
+LOGIN_MAX_FAILED_ATTEMPTS = env.int("LOGIN_MAX_FAILED_ATTEMPTS", default=5)
+LOGIN_LOCKOUT_SECONDS = env.int("LOGIN_LOCKOUT_SECONDS", default=900)
+RATE_LIMIT_LOGIN_MAX_REQUESTS = env.int("RATE_LIMIT_LOGIN_MAX_REQUESTS", default=10)
+RATE_LIMIT_LOGIN_WINDOW_SECONDS = env.int("RATE_LIMIT_LOGIN_WINDOW_SECONDS", default=60)
+RATE_LIMIT_SIGNUP_MAX_REQUESTS = env.int("RATE_LIMIT_SIGNUP_MAX_REQUESTS", default=10)
+RATE_LIMIT_SIGNUP_WINDOW_SECONDS = env.int("RATE_LIMIT_SIGNUP_WINDOW_SECONDS", default=60)
+RATE_LIMIT_COUPON_MAX_REQUESTS = env.int("RATE_LIMIT_COUPON_MAX_REQUESTS", default=20)
+RATE_LIMIT_COUPON_WINDOW_SECONDS = env.int("RATE_LIMIT_COUPON_WINDOW_SECONDS", default=60)

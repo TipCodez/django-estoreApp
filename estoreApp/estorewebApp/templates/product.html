@@ -9,21 +9,8 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-<header>
-<div class="container nav-row">
-<a href="{% url 'home' %}" class="logo">ElectroMart</a>
-<nav class="nav" id="nav">
-  <a href="{% url 'home' %}">Home</a>
-  <a href="{% url 'shop' %}">Shop</a>
-  <a href="{% url 'about' %}">About</a>
-  <a href="{% url 'contact' %}">Contact</a>
- <a href="{% url 'cart' %}">Cart</a>
-
- 
-</nav>
-<button class="menu-btn" id="menuBtn">☰</button>
-</div>
-</header>
+{% include "partials/navbar.html" with active_page="shop" %}
+{% include "partials/flash_messages.html" %}
 
 
 <main class="container">
@@ -46,6 +33,15 @@
         {% endif %}
     </p>
     <p class="description">{{ product.description }}</p>
+    <p class="stock-badge {% if product.stock <= 0 %}out{% elif product.stock <= 5 %}low{% else %}ok{% endif %}">
+        {% if product.stock <= 0 %}
+            Out of stock
+        {% elif product.stock <= 5 %}
+            Low stock: {{ product.stock }} left
+        {% else %}
+            In stock
+        {% endif %}
+    </p>
     
     {% if product.specifications %}
         <ul class="features">
@@ -57,14 +53,18 @@
     
 {% comment %}     <button class="btn add-to-cart-btn">ADD TO CART</button> {% endcomment %}
 
-  <form action="{% url 'add_to_cart' product_id=product.id %}" method="POST">
-        {% csrf_token %}
-        <!-- Hidden quantity input (defaults to 1) -->
-        <input type="hidden" name="quantity" value="1"> 
-        <button type="submit" class="btn add-to-cart-btn">
-            ADD TO CART
-        </button>
-    </form>
+    <div class="product-actions">
+      <form action="{% url 'add_to_cart' product_id=product.id %}" method="POST" class="product-action-form">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="btn add-to-cart-btn" {% if product.stock <= 0 %}disabled{% endif %}>
+              Add to Cart
+          </button>
+      </form>
+      {% if user.is_authenticated %}
+        <a href="{% url 'add_to_wishlist' product.id %}" class="btn product-wishlist-btn">Add to Wishlist</a>
+      {% endif %}
+    </div>
   </div>
 </div>
 <section class="related-products container">
@@ -86,6 +86,43 @@
         {% endfor %}
        
     </div>
+</section>
+
+<section class="container testimonial-section">
+    <h2 class="section-title">Customer Testimonials</h2>
+
+    {% if testimonials %}
+        <div class="testimonial-list">
+            {% for t in testimonials %}
+                <article class="testimonial-card">
+                    <p class="testimonial-meta"><strong>{{ t.user.username }}</strong> • {{ t.rating }}/5</p>
+                    <p>{{ t.comment }}</p>
+                    <small>{{ t.created_at }}</small>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No testimonials yet for this product.</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <form method="post" action="{% url 'submit_testimonial' product.id %}" class="testimonial-form">
+            {% csrf_token %}
+            <label for="rating">Rating</label>
+            <select id="rating" name="rating">
+                <option value="5">5 - Excellent</option>
+                <option value="4">4 - Very Good</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Fair</option>
+                <option value="1">1 - Poor</option>
+            </select>
+            <label for="comment">Your comment</label>
+            <textarea id="comment" name="comment" rows="4" required></textarea>
+            <button type="submit" class="btn">Submit Testimonial</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to leave a testimonial.</p>
+    {% endif %}
 </section>
 </main>
 

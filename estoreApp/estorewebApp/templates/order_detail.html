@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order #{{ order.id }} - ElectroMart</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {% include "partials/navbar.html" with active_page="orders" %}
+    <section class="container" style="padding: 2rem 0;">
+        <h1>Order #{{ order.id }}</h1>
+        <p>Status: {{ order.get_status_display }}</p>
+        <p>Payment: {{ order.get_payment_status_display }}</p>
+        <p>Shipping Address: {{ order.shipping_address }}</p>
+        <p>Subtotal: <strong>GHS {{ order.subtotal_amount|floatformat:2 }}</strong></p>
+        <p>Discount: <strong>GHS {{ order.discount_amount|floatformat:2 }}</strong>
+            {% if order.coupon %}(Coupon: {{ order.coupon.code }}){% endif %}
+        </p>
+        <p>Total: <strong>GHS {{ order.total_amount|floatformat:2 }}</strong></p>
+        <div class="order-timeline" style="margin: 1rem 0;">
+            {% for step, done in order.timeline_steps %}
+                <span class="timeline-step {% if done %}done{% endif %}">{{ step|title }}</span>
+            {% endfor %}
+            {% if order.status == 'cancelled' %}
+                <span class="timeline-step cancelled">Cancelled</span>
+            {% endif %}
+        </div>
+        <ul style="margin-bottom:1rem;">
+            <li>Placed: {{ order.created_at }}</li>
+            {% if order.paid_at %}<li>Paid: {{ order.paid_at }}</li>{% endif %}
+            {% if order.shipped_at %}<li>Shipped: {{ order.shipped_at }}</li>{% endif %}
+            {% if order.delivered_at %}<li>Delivered: {{ order.delivered_at }}</li>{% endif %}
+            {% if order.cancelled_at %}<li>Cancelled: {{ order.cancelled_at }}</li>{% endif %}
+        </ul>
+        {% if order.payment_status != 'paid' %}
+            <a href="{% url 'initialize_payment' order.id %}" class="btn">Pay Now</a>
+        {% endif %}
+        <h3>Items</h3>
+        <ul>
+            {% for item in order.items.all %}
+                <li>{{ item.quantity }} x {{ item.product.name }} - GHS {{ item.price_at_purchase|floatformat:2 }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'order_history' %}" class="btn">Back to Orders</a>
+    </section>
+</body>
+</html>

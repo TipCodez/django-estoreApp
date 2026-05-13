@@ -1,0 +1,27 @@
+{% if messages %}
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true">
+    {% for message in messages %}
+      <div class="toast-msg toast-{{ message.tags|default:'info' }}">
+        {{ message }}
+      </div>
+    {% endfor %}
+  </div>
+  <script>
+    (function () {
+      const stack = document.getElementById("toastStack");
+      if (!stack) return;
+      const toasts = stack.querySelectorAll(".toast-msg");
+      toasts.forEach(function (toast, index) {
+        setTimeout(function () {
+          toast.classList.add("hide");
+        }, 2600 + (index * 250));
+        setTimeout(function () {
+          toast.remove();
+          if (!stack.querySelector(".toast-msg")) {
+            stack.remove();
+          }
+        }, 3100 + (index * 250));
+      });
+    })();
+  </script>
+{% endif %}

@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - ElectroMart</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {% include "partials/navbar.html" with active_page="cart" %}
+    <section class="container" style="padding: 2rem 0;">
+        <h1>Checkout</h1>
+        <p>Subtotal: <strong>GHS {{ cart_subtotal|floatformat:2 }}</strong></p>
+        <p>Discount: <strong>GHS {{ discount_amount|floatformat:2 }}</strong>
+            {% if coupon %}(Coupon: {{ coupon.code }}){% endif %}
+        </p>
+        <p>Total: <strong>GHS {{ cart_total|floatformat:2 }}</strong></p>
+        <form method="post" action="{% url 'create_order' %}">
+            {% csrf_token %}
+            <label for="shipping_address">Shipping Address</label>
+            <input
+                id="shipping_address"
+                name="shipping_address"
+                type="text"
+                value="{{ profile.address|default:'' }}"
+                required
+                style="display:block;width:100%;max-width:600px;margin:0.5rem 0 1rem;padding:0.6rem;"
+            >
+            <button type="submit" class="btn">Place Order & Pay</button>
+            <a href="{% url 'cart' %}" class="btn">Back to Cart</a>
+        </form>
+    </section>
+</body>
+</html>

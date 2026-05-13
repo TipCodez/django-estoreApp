@@ -21,48 +21,18 @@
 
     
 
-    <header>
-
-        <div class="container nav-row">
-
-            <a href="{% url 'home' %}" class="logo">ElectroMart</a>
-
-            <nav id="nav" class="nav">
-
-                <a href="{% url 'home' %}">Home</a>
-
-                <a href="{% url 'shop' %}">Shop</a>
-
-                <a href="{% url 'cart' %}">Cart</a>
-
-                </nav>
-
-            <button class="menu-btn" id="menuBtn">☰</button>
-
-        </div>
-
-        </header>
+    {% include "partials/navbar.html" with active_page="cart" %}
+    {% include "partials/flash_messages.html" %}
 
 
 
 
 
     <section class="cart-section container">
-
-        <h1>Your Shopping Cart</h1>
-
-
-
-        {% if messages %}
-
-            {% for message in messages %}
-
-                <p class="field-message {{ message.tags }}" style="color: green; font-weight: bold;">{{ message }}</p>
-
-            {% endfor %}
-
-        {% endif %}
-
+        <div class="cart-heading">
+            <h1>Your Shopping Cart</h1>
+            <p>Review items, update quantities, and complete checkout securely.</p>
+        </div>
 
 
         {% if cart_items %}
@@ -83,7 +53,7 @@
 
                         <h3>{{ item.product.name }}</h3>
 
-                        <p class="item-price">Price: ${{ item.product.final_price|floatformat:2 }}</p>
+                        <p class="item-price">Unit Price: ${{ item.product.final_price|floatformat:2 }}</p>
 
                         <p class="item-subtotal">Subtotal: ${{ item.sub_total|floatformat:2 }}</p>
 
@@ -92,15 +62,22 @@
 
 
                     <div class="item-quantity-control">
-
-                        <label for="quantity-{{ item.id }}">Quantity:</label>
-
-                        <input type="number" id="quantity-{{ item.id }}" value="{{ item.quantity }}" min="1" readonly>
-
-                        
+                        <form method="post" action="{% url 'update_cart' item_id=item.id %}" class="qty-form">
+                            {% csrf_token %}
+                            <label for="quantity-{{ item.id }}" class="qty-label">Qty</label>
+                            <input
+                                type="number"
+                                id="quantity-{{ item.id }}"
+                                name="quantity"
+                                value="{{ item.quantity }}"
+                                min="1"
+                                max="{{ item.product.stock }}"
+                                class="qty-input"
+                            >
+                            <button type="submit" class="btn btn-view btn-update">Update</button>
+                        </form>
 
                         <a href="{% url 'remove_from_cart' item_id=item.id %}" class="btn btn-remove">Remove</a> 
-
                     </div>
 
                 </article>
@@ -117,12 +94,35 @@
 
                 <h2>Order Summary</h2>
 
+                <form method="post" action="{% url 'apply_coupon' %}" class="coupon-form">
+                    {% csrf_token %}
+                    <input type="text" name="coupon_code" placeholder="Enter coupon code" class="coupon-input">
+                    <button type="submit" class="btn btn-checkout coupon-btn">Apply Coupon</button>
+                </form>
+
+                {% if coupon %}
+                    <div class="coupon-applied">
+                        <p>Applied coupon: <strong>{{ coupon.code }}</strong></p>
+                        <a href="{% url 'remove_coupon' %}" class="btn btn-continue remove-coupon-btn">Remove Coupon</a>
+                    </div>
+                {% endif %}
+
                 <div class="summary-line">
 
                     <span>Total Items:</span>
 
                     <span>{{ cart_items|length }}</span>
 
+                </div>
+
+                <div class="summary-line">
+                    <span>Subtotal:</span>
+                    <span class="total-amount">${{ cart_subtotal|floatformat:2 }}</span>
+                </div>
+
+                <div class="summary-line">
+                    <span>Discount:</span>
+                    <span class="total-amount">-${{ discount_amount|floatformat:2 }}</span>
                 </div>
 
                 <div class="summary-line total">
@@ -135,7 +135,7 @@
 
                 
 
-                {% comment %} <a href="{% url 'checkout' %}" class="btn btn-checkout">Proceed to Checkout</a> {% endcomment %}
+                <a href="{% url 'checkout' %}" class="btn btn-checkout">Proceed to Checkout</a>
 
                 <a href="{% url 'shop' %}" class="btn btn-continue">Continue Shopping</a>
 
@@ -150,7 +150,7 @@
 
             <p>Your cart is empty! Time to fill it with great electronics.</p>
 
-            <a href="{% url 'shop' %}" class="btn btn-primary">Go to Shop</a>
+            <a href="{% url 'shop' %}" class="btn">Go to Shop</a>
 
         </div>
 
