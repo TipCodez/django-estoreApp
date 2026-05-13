@@ -17,6 +17,7 @@ env/
 *.sqlite3
 /media/
 staticfiles/
+estore
 
 # IDE/editor
 .vscode/
@@ -25,4 +26,3 @@ staticfiles/
 # OS files
 .DS_Store
 Thumbs.db
-estoreApp/estorewebApp/templates/card_template.html
