@@ -3,5 +3,6 @@ django-environ>=0.13
 python-dotenv>=1.0
 pillow>=10.0
 psycopg[binary]>=3.2
+typing_extensions>=4.12
 gunicorn>=22.0; platform_system != "Windows"
 whitenoise>=6.7
