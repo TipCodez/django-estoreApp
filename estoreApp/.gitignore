@@ -1,23 +1,26 @@
-# Python stuff
+# Python
 *.pyc
 __pycache__/
 *.pyo
 *.pyd
+.Python
 
-# Virtual environment
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Virtual environments
 .venv/
 venv/
 ENV/
 env/
-env/
-*.env
-.env
 
-# Django stuff
+# Django
 *.sqlite3
-/media/
+db.sqlite3
+media/
 staticfiles/
-estore
 
 # IDE/editor
 .vscode/

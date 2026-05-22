@@ -39,10 +39,18 @@ SECRET_KEY = env("SECRET_KEY", default="django-insecure-change-this-in-productio
 # Prefer DJANGO_DEBUG to avoid collisions with machine-level DEBUG env vars.
 DEBUG = env.bool("DJANGO_DEBUG", default=env.bool("DEBUG", default=False))
 
-ALLOWED_HOSTS = [h.strip() for h in env("ALLOWED_HOSTS", default="127.0.0.1,localhost").split(",") if h.strip()]
+ALLOWED_HOSTS = [h.strip() for h in env("ALLOWED_HOSTS", default="127.0.0.1,localhost,.vercel.app").split(",") if h.strip()]
+VERCEL_URL = env("VERCEL_URL", default="")
+if VERCEL_URL and VERCEL_URL not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(VERCEL_URL)
+
 CSRF_TRUSTED_ORIGINS = [
-    o.strip() for o in env("CSRF_TRUSTED_ORIGINS", default="").split(",") if o.strip()
+    o.strip() for o in env("CSRF_TRUSTED_ORIGINS", default="https://*.vercel.app").split(",") if o.strip()
 ]
+if VERCEL_URL:
+    vercel_origin = f"https://{VERCEL_URL}"
+    if vercel_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(vercel_origin)
 # ALLOWED_HOSTS = ["*"]
 # CSRF_TRUSTED_ORIGINS = [
 #     "https://43eb604d1d8e.ngrok-free.app",  # replace with your ngrok URL
@@ -160,8 +168,7 @@ STATIC_URL = '/static/'
 # settings.py
 
 
-# Optional for production
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR / 'static'] if (BASE_DIR / 'static').exists() else []
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 if HAS_WHITENOISE:
     STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
